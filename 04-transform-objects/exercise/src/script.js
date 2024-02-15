@@ -1,7 +1,10 @@
 import './style.css'
 import * as THREE from 'three'
 import gsap from 'gsap'
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
+console.log(OrbitControls)
 
 /**
  * Cursor
@@ -14,10 +17,7 @@ window.addEventListener('mousemove', (event) =>
 {
     cursor.x = event.clientX / sizes.width - 0.5
     cursor.y = - (event.clientY / sizes.height - 0.5)
-
-
-
-    console.log(cursor.y)
+    // console.log(cursor.y)
 })
 
 // Canvas
@@ -121,9 +121,15 @@ scene.add(camera)
 // camera.lookAt(mesh.position)
 // console.log(mesh.position.distanceTo(camera.position))
 
-/**
- * Renderer
- */
+/* Controls - the two parameters for OrbitControls is your camera 
+that you want to update and the DOM element that the mouse events 
+are being applied to. */ 
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true
+// controls.target.y = 2
+// controls.update()
+
+// Renderer
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
@@ -156,7 +162,7 @@ const tick = () =>
     // group.position.x -= 0.01
     // group.rotation.y += 0.0005 * deltaTime
     // group.rotation.y = elapsedTime
-    group.rotation.y = elapsedTime
+    // group.rotation.y = elapsedTime
     // group.position.y = Math.sin(elapsedTime)
     // group.position.x = Math.cos(elapsedTime)
     // camera.position.y = Math.sin(elapsedTime) *2
@@ -164,10 +170,17 @@ const tick = () =>
     // camera.lookAt(group.position)
 
     // Update Camera
-    camera.position.x = cursor.x * 10
-    camera.position.y = cursor.y * 10
+    // camera.position.x = cursor.x * 10
+    // camera.position.y = cursor.y * 10
+    // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3
+    // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 3
+    // camera.position.y = cursor.y * 5
+
     // camera.lookAt(new THREE.Vector3())
     camera.lookAt(group.position)
+
+    // Update controls - this updates the damping controls above.
+    controls.update()
 
     // Render
     renderer.render(scene, camera)
