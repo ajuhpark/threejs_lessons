@@ -1,4 +1,24 @@
+import './style.css'
 import * as THREE from 'three'
+import gsap from 'gsap'
+
+
+/**
+ * Cursor
+ */
+const cursor = {
+    x: 0,
+    y: 0
+}
+window.addEventListener('mousemove', (event) => 
+{
+    cursor.x = event.clientX / sizes.width - 0.5
+    cursor.y = - (event.clientY / sizes.height - 0.5)
+
+
+
+    console.log(cursor.y)
+})
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -10,9 +30,15 @@ const scene = new THREE.Scene()
  * Objects as a group
  */
 const group = new THREE.Group()
-group.position.y = 1
-group.scale.y = 2
-group.rotation.y = 1
+// group.position.y = 0
+group.position.x = 1.5
+group.position.y = 1.5
+group.position.z = 3
+
+
+group.scale.y = 1
+group.rotation.y = 0
+
 scene.add(group)
 
 const cube1 = new THREE.Mesh(
@@ -75,14 +101,24 @@ const sizes = {
 /**
  * Camera
  */
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
-camera.position.z = 3
-// camera.position.y = 1
-// camera.position.x = 1
+const aspectRatio = sizes.width / sizes.height
+
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, .1, 100)
+// const camera = new THREE.OrthographicCamera(
+//     - 1 * aspectRatio, 
+//     1 * aspectRatio, 
+//     1, 
+//     - 1, 
+//     0.1, 
+//     100 )
+
+// camera.position.x = 2.5
+// camera.position.y = 3
+camera.position.z = 10
+camera.lookAt(group.position)
 scene.add(camera)
 // camera.lookAt(new THREE.Vector3(3, 0, 0))
 // camera.lookAt(mesh.position)
-
 // console.log(mesh.position.distanceTo(camera.position))
 
 /**
@@ -93,3 +129,51 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.render(scene, camera)
+
+// Time
+let time = Date.now()
+
+// Clock 
+const clock = new THREE.Clock()
+// gsap.to(group.position, { duration: 1, delay: 1, x: 2})
+// gsap.to(group.position, { duration: 1, delay: 2, x: 0})
+
+
+//Animations
+const tick = () =>
+{
+    //Clock 
+    const elapsedTime = clock.getElapsedTime()
+    // console.log(elapsedTime)
+
+    // Time
+    // const currentTime = Date.now()
+    // const deltaTime = currentTime - time
+    // time = currentTime
+    // console.log(deltaTime)
+
+    // Update objects
+    // group.position.x -= 0.01
+    // group.rotation.y += 0.0005 * deltaTime
+    // group.rotation.y = elapsedTime
+    group.rotation.y = elapsedTime
+    // group.position.y = Math.sin(elapsedTime)
+    // group.position.x = Math.cos(elapsedTime)
+    // camera.position.y = Math.sin(elapsedTime) *2
+    // camera.position.x = Math.cos(elapsedTime) *2
+    // camera.lookAt(group.position)
+
+    // Update Camera
+    camera.position.x = cursor.x * 10
+    camera.position.y = cursor.y * 10
+    // camera.lookAt(new THREE.Vector3())
+    camera.lookAt(group.position)
+
+    // Render
+    renderer.render(scene, camera)
+
+    window.requestAnimationFrame(tick)
+
+}
+
+tick()
