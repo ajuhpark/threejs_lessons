@@ -40,14 +40,57 @@ group.rotation.y = 0
 
 scene.add(group)
 
+/* One way of doing Arrays
+const positionsArray = new Float32Array(9)
+
+positionsArray[0] = 0
+positionsArray[1] = 0
+positionsArray[2] = 0
+
+positionsArray[3] = 0
+positionsArray[4] = 1
+positionsArray[5] = 0
+
+positionsArray[6] = 1
+positionsArray[7] = 0
+positionsArray[8] = 0
+*/
+
+/*another way to do array
+const positionsArray = new Float32Array([
+    0, 0, 0,
+    0, 1, 0, 
+    1, 0, 0
+])
+*/
+
+
+
+const geometry = new THREE.BufferGeometry()
+const count = 50
+const positionsArray = new Float32Array(count * 3 * 3)
+
+// filling the array with random values
+for(let i = 0; i < count * 3 * 3; i++){
+    positionsArray[i] = (Math.random() - 0.5) * 1.5
+}
+
+const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3)
+geometry.setAttribute('position', positionsAttribute)
+
+
+
 const cube1 = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
+    // new THREE.BoxGeometry(1, 1, 1),
+    // putting the new geometry var for the array here.
+    geometry,
     new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true})
 )
 group.add(cube1)
 
 const cube2 = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
+    // geometry, 
     new THREE.MeshBasicMaterial({ color: 0X00ff00, wireframe: true})
 )
 cube2.position.x = - 2
