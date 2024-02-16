@@ -1,7 +1,6 @@
 import './style.css'
 import * as THREE from 'three'
 import gsap from 'gsap'
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
 console.log(OrbitControls)
@@ -94,9 +93,55 @@ scene.add(axesHelper)
  * Sizes
  */
 const sizes = {
-    width: 800,
-    height: 600
+    width: window.innerWidth,
+    height: window.innerHeight
 }
+
+window.addEventListener('resize', () => 
+{
+    // Update sizes
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+    // console.log('window has been resized')
+
+    // Update Camera
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
+
+    // Update renderer
+    renderer.setSize(sizes.width, sizes.height)
+    // setting the pixel ratio here
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+})
+
+window.addEventListener('dblclick', () =>
+{
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement
+    /* For Safari, we need to use prefixed versions to make it work for 
+    document.fullscreenElement, canvas.requestFullscreen, and 
+    document.exitFullscreen*/
+    if(!fullscreenElement){
+        if(canvas.requestFullscreen){
+            canvas.requestFullscreen()
+            // console.log('go fullscreen')
+        }
+        else if (canvas.webkitRequestFullscreen)
+        {
+            canvas.webkitRequestFullscreen()
+        }
+    } 
+    else{
+        if (document.exitFullscreen){
+            document.exitFullscreen()
+        }
+        else if (document.webkitFullscreenElement)
+        {
+            document.exitFullscreen()
+            // console.log('leave fullscreen')
+        }
+    }
+})
 
 /**
  * Camera
@@ -125,6 +170,7 @@ scene.add(camera)
 that you want to update and the DOM element that the mouse events 
 are being applied to. */ 
 const controls = new OrbitControls(camera, canvas)
+// controls.enabled = false 
 controls.enableDamping = true
 // controls.target.y = 2
 // controls.update()
@@ -135,6 +181,10 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.render(scene, camera)
+/*the below sets the pixel ratio to the device pixel ratio.
+Mine is 2. We're also setting a min so it doesn't go above 2.
+Math.min parameters returns the smaller of the two*/
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 // Time
 let time = Date.now()

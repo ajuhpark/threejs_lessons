@@ -1,0 +1,22 @@
+*
+/* This removes default padding and margin from outside */
+
+{
+    margin: 0;
+    padding: 0;
+}
+
+html, 
+body
+{
+    overflow: hidden; /* prevents scrolling */
+}
+
+/* Moves canvas to the top left corner. .webgl is the class for teh canvas */
+.webgl
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none; /* removing outline when you drag and drop */
+}
