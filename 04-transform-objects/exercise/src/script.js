@@ -2,8 +2,27 @@ import './style.css'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import GUI from 'lil-gui'
 
-console.log(OrbitControls)
+/** 
+ * Debug - instantiating lil-gui so we can use the dependency
+ */
+const gui = new GUI({
+    // width: 280,
+    title: 'Nice debug UI',
+    closeFolders: false, 
+
+})
+// gui.close()
+gui.hide()
+
+// adding a toggle to hide, unhide debug
+window.addEventListener('keydown', () =>
+{
+    if(event.key == 'h')
+        gui.show(gui._hidden)
+})
+const debugObject = {}
 
 /**
  * Cursor
@@ -28,6 +47,8 @@ const scene = new THREE.Scene()
 /**
  * Objects as a group
  */
+debugObject.color = '#33E133'
+
 const group = new THREE.Group()
 // group.position.y = 0
 group.position.x = 1.5
@@ -64,8 +85,6 @@ const positionsArray = new Float32Array([
 ])
 */
 
-
-
 const geometry = new THREE.BufferGeometry()
 const count = 50
 const positionsArray = new Float32Array(count * 3 * 3)
@@ -88,11 +107,17 @@ const cube1 = new THREE.Mesh(
 )
 group.add(cube1)
 
-const cube2 = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    // geometry, 
-    new THREE.MeshBasicMaterial({ color: 0X00ff00, wireframe: true})
-)
+const geometry_1 = new THREE.BoxGeometry(1, 1, 1)
+const material_1 = new THREE.MeshBasicMaterial({ color: debugObject.color, wireframe: true })
+const mesh_1 = new THREE.Mesh(geometry_1, material_1)
+
+const cube2 = mesh_1
+// const cube2 = new THREE.Mesh(
+//     // new THREE.BoxGeometry(1, 1, 1),
+//     geometry_1, 
+//     // new THREE.MeshBasicMaterial({ color: 0X00ff00, wireframe: true})
+//     material_1
+// )
 cube2.position.x = - 2
 group.add(cube2)
 
@@ -131,6 +156,69 @@ mesh.position.set(0.7, -0.6, 1)
 // Axes helper - shows the axes
 const axesHelper = new THREE.AxesHelper(2)
 scene.add(axesHelper)
+
+const cubeTweaks = gui.addFolder('Awesome cube')
+// cubeTweaks.close()
+
+
+// Adding gui
+// gui.add(group.position, 'y', - 3, 3, 0.01)
+cubeTweaks
+    .add(group.position, 'y')
+    .min(- 3)
+    .max(3)
+    .step(0.01)
+    .name('elevation')
+
+/*
+lil-gui can only modify properties, not variables.
+So you wouldn't be able to update a variable like below
+let myVariable = 1337
+gui.add(myVariable, '??')
+
+But you can use some tricks to do so, such as creating 
+an object whose purpose is to hold properties for 
+lil-gui to be used on the object like below:
+
+const myObject = {
+    myVariable: 1337
+}
+gui.add(myObject, 'myVariable')
+*/
+
+cubeTweaks.add(group, 'visible')
+cubeTweaks.add(material_1, 'wireframe')
+
+cubeTweaks
+    .addColor(material_1, 'color')
+    .onChange(() => {
+        // console.log(value.getHexString())
+        material_1.color.set(debugObject.color)
+        console.log(debugObject.color)
+    })
+
+debugObject.spin = () =>
+{
+    gsap.to(mesh_1.rotation, { y: mesh_1.rotation.y + Math.PI * 2 })
+}
+cubeTweaks.add(debugObject, 'spin')
+
+
+debugObject.subdivision = 2
+cubeTweaks
+    .add(debugObject, 'subdivision')
+    .min(1)
+    .max(20)
+    .step(1)
+    .onFinishChange(() => 
+    {
+        // console.log('subdivision finished changing')
+        mesh_1.geometry = new THREE.BoxGeometry(
+            1, 1, 1, 
+            debugObject.subdivision, debugObject.subdivision, debugObject.subdivision
+        )
+    })
+
 
 /**
  * Sizes
