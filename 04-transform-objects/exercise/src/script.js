@@ -4,6 +4,78 @@ import gsap from 'gsap'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import GUI from 'lil-gui'
 
+/* 
+* Textures 
+*/
+/**
+ * One way to apply textures
+const image = new Image()
+const texture = new THREE.Texture(image)
+texture.colorSpace = THREE.SRGBColorSpace //this gets it to the correct color
+
+image.onload = () =>
+{
+    // const texture = new THREE.Texture(image)
+    // console.log(texture)
+    // console.log('image loaded')
+    texture.needsUpdate = true
+}
+
+image.src = '/textures/door/color.jpg'
+*/
+
+const loadingManager = new THREE.LoadingManager()
+
+/*
+* Loading Manager 
+
+loadingManager.onStart = () =>
+{
+    console.log('onStart')
+}
+loadingManager.onLoad = () =>
+{
+    console.log('onLoad')
+}
+loadingManager.onProgress = () =>
+{
+    console.log('onProgress')
+}
+loadingManager.onError = () =>
+{
+    console.log('onError')
+}
+*/
+
+const textureLoader = new THREE.TextureLoader(loadingManager)
+const colorTexture = textureLoader.load('/textures/minecraft.png')
+const alphaTexture = textureLoader.load('/textures/door/alpha.jpg')
+const heightTexture = textureLoader.load('/textures/door/height.jpg')
+const normalTexture = textureLoader.load('/textures/door/normal.jpg')
+const ambientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg')
+const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg')
+const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg')
+
+// colorTexture.repeat.x = 2
+// colorTexture.repeat.y = 3
+// // colorTexture.wrapS = THREE.RepeatWrapping
+// // colorTexture.wrapT = THREE.RepeatWrapping
+// colorTexture.wrapS = THREE.MirroredRepeatWrapping
+// colorTexture.wrapT = THREE.MirroredRepeatWrapping
+// colorTexture.offset.x = 0.5
+// colorTexture.offset.y = 0.5
+// colorTexture.rotation = Math.PI * .25
+// colorTexture.center.x = 0.5
+// colorTexture.center.y = 0.5
+
+colorTexture.generateMipmaps = false
+colorTexture.minFilter = THREE.NearestFilter
+colorTexture.magFilter = THREE.NearestFilter //this magnifies small images
+
+colorTexture.colorSpace = THREE.SRGBColorSpace //this gets it to the correct color
+
+
+
 /** 
  * Debug - instantiating lil-gui so we can use the dependency
  */
@@ -121,10 +193,16 @@ const cube2 = mesh_1
 cube2.position.x = - 2
 group.add(cube2)
 
-const cube3 = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: 0X0000ff, wireframe: true})
-)
+const geometry_2 = new THREE.BoxGeometry(1, 1, 1)
+// console.log(geometry_2.attributes.uv)
+const material_2 = new THREE.MeshBasicMaterial({ map: colorTexture, wireframe: false })
+const mesh_2 = new THREE.Mesh(geometry_2, material_2)
+
+const cube3 = mesh_2
+// const cube3 = new THREE.Mesh(
+//     new THREE.BoxGeometry(1, 1, 1),
+//     new THREE.MeshBasicMaterial({ color: 0X0000ff, wireframe: true})
+// )
 cube3.position.x = 2
 group.add(cube3)
 
