@@ -1,5 +1,12 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import GUI from 'lil-gui'
+import { RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
+
+/**
+ * Debug
+ */
+const gui = new GUI()
 
 /**
 - Create 3 Meshes composed of 3 different geometries (sphere, plane, torus)
@@ -83,7 +90,6 @@ group.add(cube1)
 
 // Cube 2
 
-
 const geometry_2 = new THREE.SphereGeometry(.65, 32, 16)
 // const material_2 = new THREE.MeshBasicMaterial({ color: 0X00ff00, wireframe: true })
 
@@ -127,9 +133,8 @@ group.add(cube3)
 
 const geometry_4 = new THREE.ConeGeometry( .5, 1, 32)
 
-//MeshMatcapMaterial
-const material_4 = new THREE.MeshMatcapMaterial()
-material_4.matcap = matcapTexture
+//MeshDepthMaterial - if you zoom in, it gets light
+const material_4 = new THREE.MeshDepthMaterial()
 
 // const material_4 = new THREE.MeshBasicMaterial({ color: 0X0000ff, wireframe: true })
 const mesh_4 = new THREE.Mesh(geometry_4, material_4)
@@ -150,9 +155,8 @@ scene.add(axesHelper)
 
 const geometry_5 = new THREE.CylinderGeometry( .5, .5, 1, 20)
 
-//MeshMatcapMaterial
-const material_5 = new THREE.MeshMatcapMaterial()
-material_5.matcap = matcapTexture
+//MeshLambertMaterial - This material requires lights
+const material_5 = new THREE.MeshLambertMaterial()
 
 // const material_5 = new THREE.MeshBasicMaterial({ color: 0X0000ff, wireframe: true })
 const mesh_5 = new THREE.Mesh(geometry_5, material_5)
@@ -165,13 +169,15 @@ cube5.position.z = 1
 
 group.add(cube5)
 
+
 //Cube 6
 
 const geometry_6 = new THREE.CapsuleGeometry( .5, .25, 4, 8 )
 
-//MeshMatcapMaterial
-const material_6 = new THREE.MeshMatcapMaterial()
-material_6.matcap = matcapTexture
+//MeshPhongMaterial - this is like MeshLambertMaterial but it has light reflection.
+const material_6 = new THREE.MeshPhongMaterial()
+material_6.shininess = 80
+material_6.specular = new THREE.Color(0x1188ff)
 
 // const material_6 = new THREE.MeshBasicMaterial({ color: 0X0000ff, wireframe: true })
 const mesh_6 = new THREE.Mesh(geometry_6, material_6)
@@ -188,12 +194,15 @@ group.add(cube6)
 
 const geometry_7 = new THREE.CapsuleGeometry( .5, .25, 4, 8 )
 
-//MeshMatcapMaterial
-const material_7 = new THREE.MeshMatcapMaterial()
-material_7.matcap = matcapTexture
+//MeshToonMaterial
+const material_7 = new THREE.MeshToonMaterial()
 
 // const material_7 = new THREE.MeshBasicMaterial({ color: 0X0000ff, wireframe: true })
 const mesh_7 = new THREE.Mesh(geometry_7, material_7)
+gradientTexture.minFilter = THREE.NearestFilter
+gradientTexture.magFilter = THREE.NearestFilter
+gradientTexture.generateMipmaps = false
+material_1.gradientMap = gradientTexture
 
 const cube7 = mesh_7
 
@@ -207,9 +216,15 @@ group.add(cube7)
 
 const geometry_8 = new THREE.SphereGeometry(.65, 32, 16)
 
-//MeshMatcapMaterial
-const material_8 = new THREE.MeshMatcapMaterial()
-material_8.matcap = matcapTexture
+//MeshStandardMaterial
+const material_8 = new THREE.MeshStandardMaterial()
+material_8.metalness = 0.7
+material_8.roughness = 0.2
+material_8.map = doorColorTexture
+
+gui.add(material_8, 'metalness').min(0).max(1).step(0.0001)
+gui.add(material_8, 'roughness').min(0).max(1).step(0.0001)
+
 
 // const material_8 = new THREE.MeshBasicMaterial({ color: 0X0000ff, wireframe: true })
 const mesh_8 = new THREE.Mesh(geometry_8, material_8)
@@ -240,6 +255,32 @@ cube9.position.y = 5
 cube9.position.z = 1
 
 group.add(cube9)
+
+/**
+ * Lights
+ */
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 1)
+scene.add(ambientLight)
+
+const pointLight = new THREE.PointLight(0xffffff, 30)
+pointLight.position.x = 7
+pointLight.position.y = 7
+pointLight.position.z = 4
+scene.add(pointLight)
+
+/**
+ * Environment map
+ */
+
+const rgbeLoader = new RGBELoader()
+rgbeLoader.load('/textures/environmentMap/2k.hdr', (environmentMap) =>
+{
+    // console.log(environmentMap)
+    environmentMap.mapping = THREE.EquirectangularReflectionMapping
+    scene.background = environmentMap
+    scene.environment = environmentMap
+})
 
 /**
  * Sizes
