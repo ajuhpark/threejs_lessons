@@ -214,13 +214,22 @@ group.add(cube7)
 
 //Cube 8
 
-const geometry_8 = new THREE.SphereGeometry(.65, 32, 16)
+const geometry_8 = new THREE.SphereGeometry(.65, 64, 64)
 
 //MeshStandardMaterial
 const material_8 = new THREE.MeshStandardMaterial()
-material_8.metalness = 0.7
-material_8.roughness = 0.2
+material_8.metalness = 1
+material_8.roughness = 1
 material_8.map = doorColorTexture
+material_8.aoMap = doorAmbientOcclusionTexture //this image creates shade where it's dark
+material_8.aoMapIntensity = 1
+material_8.displacementMap = doorHeightTexture //this one makes it more 3d according to image
+material_8.displacementScale = 0.05
+material_8.metalnessMap = doorMetalnessTexture
+material_8.roughnessMap = doorRoughnessTexture
+material_8.normalMap = doorNormalTexture  // fakes the normal orientation and adds detail regardless of subdivision
+material_8.normalScale.set(0.5,0.5)
+material_8.alphaMap = doorAlphaTexture
 
 gui.add(material_8, 'metalness').min(0).max(1).step(0.0001)
 gui.add(material_8, 'roughness').min(0).max(1).step(0.0001)
@@ -241,9 +250,62 @@ group.add(cube8)
 
 const geometry_9 = new THREE.ConeGeometry( .5, 1, 32)
 
-//MeshMatcapMaterial
-const material_9 = new THREE.MeshMatcapMaterial()
-material_9.matcap = matcapTexture
+//MeshPhysicalMaterial - same as StandardMaterial but access to more features
+const material_9 = new THREE.MeshPhysicalMaterial()
+material_9.metalness = 0
+material_9.roughness = 0
+// material_9.map = doorColorTexture
+// material_9.aoMap = doorAmbientOcclusionTexture //this image creates shade where it's dark
+// material_9.aoMapIntensity = 1
+// material_9.displacementMap = doorHeightTexture //this one makes it more 3d according to image
+// material_9.displacementScale = 0.05
+// material_9.metalnessMap = doorMetalnessTexture
+// material_9.roughnessMap = doorRoughnessTexture
+// material_9.normalMap = doorNormalTexture  // fakes the normal orientation and adds detail regardless of subdivision
+// material_9.normalScale.set(0.5,0.5)
+// material_9.alphaMap = doorAlphaTexture
+
+// added for physicalMaterial
+// clearCoat
+// material_9.clearcoat = 1
+// material_9.clearcoatroughness = 0
+
+gui.add(material_9, 'metalness').min(0).max(1).step(0.0001)
+gui.add(material_9, 'roughness').min(0).max(1).step(0.0001)
+// gui.add(material_9, 'clearcoat').min(0).max(1).step(0.0001)
+// gui.add(material_9, 'clearcoatRoughness').min(0).max(1).step(0.0001)
+
+// Sheen 
+// material_9.sheen = 1
+// material_9.sheenRoughness = 0.25
+// material_9.sheenColor.set(1, 1, 1)
+
+// gui.add(material_9, 'sheen').min(0).max(1).step(0.0001)
+// gui.add(material_9, 'sheenRoughness').min(0).max(1).step(0.0001)
+// gui.addColor(material_9, 'sheenColor')
+
+// Iridscence - adds like the gasoline puddle reflection
+// material_9.iridescence = 1
+// material_9.iridescenceIOR = 1
+// material_9.iridescenceThicknessRange = [ 100, 800 ]
+
+// gui.add(material_9, 'iridescence').min(0).max(1).step(0.0001)
+// gui.add(material_9, 'iridescenceIOR').min(0).max(2.333).step(0.0001)
+// gui.add(material_9.iridescenceThicknessRange, '0').min(1).max(1000).step(1)
+// gui.add(material_9.iridescenceThicknessRange, '1').min(1).max(1000).step(1)
+
+// Transmission - makes it like kind of transparent 
+// this can work well if you turn everything off except for metalness and rougness
+material_9.transmission = 1
+//ior stands for index of refraction. 
+// diamond: 2.417, water 1.333, Air, 1.000293
+material_9.ior = 1.5 
+material_9.thickness = 0.5
+
+gui.add(material_9, 'transmission').min(0).max(1).step(0.0001)
+gui.add(material_9, 'ior').min(1).max(10).step(0.0001)
+gui.add(material_9, 'thickness').min(1).max(1).step(.0001)
+
 
 // const material_9 = new THREE.MeshBasicMaterial({ color: 0X0000ff, wireframe: true })
 const mesh_9 = new THREE.Mesh(geometry_9, material_9)

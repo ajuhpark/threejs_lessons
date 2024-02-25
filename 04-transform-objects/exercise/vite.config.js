@@ -20,6 +20,7 @@ export default {
           input: {
             main: resolve(root, './index.html'),
             home_2: resolve(root, 'home_2', './index_11.html'),
+            lesson_12: resolve(root, 'lesson_12', './index_12.html')
             // ...
             // List all files you want in your build
           }
