@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
+
 
 /**
  * Base
@@ -11,8 +13,14 @@ const gui = new GUI()
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
+
 // Scene
 const scene = new THREE.Scene()
+
+// Axes helper - shows the axes
+const axesHelper = new THREE.AxesHelper(2)
+scene.add(axesHelper)
+
 
 /**
  * Lights
@@ -39,6 +47,56 @@ color from the sky than the color coming from the ground */
 const hemisphereLight = new THREE.HemisphereLight(0xff0000, 0x0000ff, 0.9)
 scene.add(hemisphereLight)
 
+/** pointLight is like a lighter. Light starts at a small point and spreads 
+ *  last two parameters are distance and decay/dim. */
+const pointLight = new THREE.PointLight(0xff9000, 1.5, 10, 2)
+scene.add(pointLight)
+
+/** rectAreaLight works like the big rectangle lights you see on 
+ * photoshoot set. It's a mix between directional and diffuse light 
+ * Parameters: color, intensity, width, height. 
+ * Only works w MeshStandardMaterial and Mesh Physical Material*/
+
+const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 6, 1, 1)
+rectAreaLight.position.set(-1.5, 0, 1.5)
+rectAreaLight.lookAt(new THREE.Vector3())
+scene.add(rectAreaLight)
+gui.add(rectAreaLight, 'intensity').min(0).max(3).step(0.001)
+
+/** Spotlight */
+const spotLight = new THREE.SpotLight()
+// const spotLight = new THREE.SpotLight(0x78ff00, 4.5, 10, Math.PI * 0.1, 0.25, 1)
+spotLight.color = new THREE.Color(0x78ff00)
+spotLight.intensity = 4.5
+spotLight.distance = 10
+spotLight.angle = Math.PI* 0.1 //how wide the light is
+spotLight.penumbra = 0.25 //sharpmness of the edge of the shape
+spotLight.decay = 1
+
+// to position spotlight, we need to add its target property to the scene and move it
+spotLight.target.position.x = -1.75
+scene.add(spotLight.target) 
+
+spotLight.position.set(0, 2, 3)
+scene.add(spotLight)
+
+/**
+ * Helpers
+ */
+const hemisphereLightHelper = new THREE.HemisphereLightHelper(hemisphereLight, 0.2)
+scene.add(hemisphereLightHelper)
+
+const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.2)
+scene.add(directionalLightHelper)
+
+const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.2)
+scene.add( pointLightHelper )
+
+const spotLightHelper = new THREE.SpotLightHelper(spotLight)
+scene.add(spotLightHelper)
+
+const rectAreaLightHelper = new RectAreaLightHelper(rectAreaLight)
+scene.add(rectAreaLightHelper)
 
 /**
  * Objects
