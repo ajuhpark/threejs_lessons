@@ -23,7 +23,8 @@ export default {
             lesson_12: resolve(root, 'lesson_12', './index_12.html'),
             lesson_14: resolve(root, 'lesson_14', './index_14.html'),
             lesson_15: resolve(root, 'lesson_15', './index_15.html'),
-            lesson_16: resolve(root, 'lesson_16', './index_16.html')
+            lesson_16: resolve(root, 'lesson_16', './index_16.html'),
+            lesson_17: resolve(root, 'lesson_17', './index_17.html')
             // ...
             // List all files you want in your build
           }
