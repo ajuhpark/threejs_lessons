@@ -25,29 +25,31 @@ scene.fog = fog
 const textureLoader = new THREE.TextureLoader()
 
 // Door textures
-const doorColorTexture = textureLoader.load('/lesson_16/static/textures/door/color.jpg')
-const doorAlphaTexture = textureLoader.load('/lesson_16/static/textures/door/alpha.jpg')
-const doorAmbientOcclusionTexture = textureLoader.load('/lesson_16/static/textures/door/ambientOcclusion.jpg')
-const doorHeightTexture = textureLoader.load('/lesson_16/static/textures/door/height.jpg')
-const doorNormalTexture = textureLoader.load('/lesson_16/static/textures/door/normal.jpg')
-const doorMetalnessTexture = textureLoader.load('/lesson_16/static/textures/door/metalness.jpg')
-const doorRoughnessTexture = textureLoader.load('/lesson_16/static/textures/door/roughness.jpg')
+const doorColorTexture = textureLoader.load('/textures/lesson_16_textures/door/color.jpg')
+const doorAlphaTexture = textureLoader.load('/textures/lesson_16_textures/door/alpha.jpg')
+const doorAmbientOcclusionTexture = textureLoader.load('/textures/lesson_16_textures/door/ambientOcclusion.jpg')
+const doorHeightTexture = textureLoader.load('/textures/lesson_16_textures/door/height.jpg')
+const doorNormalTexture = textureLoader.load('/textures/lesson_16_textures/door/normal.jpg')
+const doorMetalnessTexture = textureLoader.load('/textures/lesson_16_textures/door/metalness.jpg')
+const doorRoughnessTexture = textureLoader.load('/textures/lesson_16_textures/door/roughness.jpg')
 
 doorColorTexture.colorSpace = THREE.SRGBColorSpace
 
+// /textures/lesson_17_textures/particles/2.png
+
 // Brick textures
-const bricksColorTexture = textureLoader.load('/lesson_16/static/textures/bricks/color.jpg')
-const bricksAmbientOcclusionTexture = textureLoader.load('/lesson_16/static/textures/bricks/ambientOcclusion.jpg')
-const bricksNormalTexture = textureLoader.load('/lesson_16/static/textures/bricks/normal.jpg')
-const bricksRoughnessTexture = textureLoader.load('/lesson_16/static/textures/bricks/roughness.jpg')
+const bricksColorTexture = textureLoader.load('/textures/lesson_16_textures/bricks/color.jpg')
+const bricksAmbientOcclusionTexture = textureLoader.load('/textures/lesson_16_textures/bricks/ambientOcclusion.jpg')
+const bricksNormalTexture = textureLoader.load('/textures/lesson_16_textures/bricks/normal.jpg')
+const bricksRoughnessTexture = textureLoader.load('/textures/lesson_16_textures/bricks/roughness.jpg')
 
 bricksColorTexture.colorSpace = THREE.SRGBColorSpace
 
 // Grass textures
-const grassColorTexture = textureLoader.load('/lesson_16/static/textures/grass/color.jpg')
-const grassAmbientOcclusionTexture = textureLoader.load('/lesson_16/static/textures/grass/ambientOcclusion.jpg')
-const grassNormalTexture = textureLoader.load('/lesson_16/static/textures/grass/normal.jpg')
-const grassRoughnessTexture = textureLoader.load('/lesson_16/static/textures/grass/roughness.jpg')
+const grassColorTexture = textureLoader.load('/textures/lesson_16_textures/grass/color.jpg')
+const grassAmbientOcclusionTexture = textureLoader.load('/textures/lesson_16_textures/grass/ambientOcclusion.jpg')
+const grassNormalTexture = textureLoader.load('/textures/lesson_16_textures/grass/normal.jpg')
+const grassRoughnessTexture = textureLoader.load('/textures/lesson_16_textures/grass/roughness.jpg')
 
 grassColorTexture.repeat.set(8, 8)
 grassAmbientOcclusionTexture.repeat.set(8, 8)
