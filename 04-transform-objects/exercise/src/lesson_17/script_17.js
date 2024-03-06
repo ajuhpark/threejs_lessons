@@ -21,8 +21,7 @@ scene.add(axesHelper)
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
-const particleTexture = textureLoader.load('/lesson_17/textures/particles/2.png')
-
+const particleTexture = textureLoader.load('/textures/lesson_17_textures/particles/2.png')
 
 /**
  * Particles
