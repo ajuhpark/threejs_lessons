@@ -1,6 +1,11 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
+import testVertexShader from './shaders/test/vertex.glsl'
+import testFragmentShader from './shaders/test/fragment.glsl'
+
+console.log(testVertexShader)
+
 
 /**
  * Base
@@ -18,6 +23,7 @@ const scene = new THREE.Scene()
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
+const flagTexture = textureLoader.load('/textures/lesson_27_textures/hugo.jpeg')
 
 /**
  * Test mesh
@@ -25,11 +31,41 @@ const textureLoader = new THREE.TextureLoader()
 // Geometry
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 
+const count = geometry.attributes.position.count
+const randoms = new Float32Array(count)
+
+for(let i = 0; i < count; i++){
+    randoms[i] = Math.random()
+}
+
+geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1))
+// console.log(geometry)
+
+
 // Material
-const material = new THREE.MeshBasicMaterial()
+const material = new THREE.RawShaderMaterial({
+    vertexShader: testVertexShader,
+    fragmentShader: testFragmentShader,
+    // transparent: true
+    // wireframe: true
+    side: THREE.DoubleSide,
+    uniforms:
+    {
+        uFrequency: { value: new THREE.Vector2(7, 5) }, 
+        uTime: { value: 0 },
+        uColor: { value: new THREE.Color('orange') },
+        uTexture: { value: flagTexture }
+    }
+
+})
+
+gui.add(material.uniforms.uFrequency.value, 'x').min(0).max(20).step(0.01).name('frequencyX')
+gui.add(material.uniforms.uFrequency.value, 'y').min(0).max(20).step(0.01).name('frequencyY')
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material)
+mesh.scale.y = 2 / 3
+
 scene.add(mesh)
 
 /**
@@ -84,6 +120,9 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    // Update material
+    material.uniforms.uTime.value = elapsedTime
 
     // Update controls
     controls.update()

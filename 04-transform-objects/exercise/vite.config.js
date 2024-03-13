@@ -1,4 +1,5 @@
 import { resolve } from 'path'
+import glsl from 'vite-plugin-glsl'
 
 const root = resolve(__dirname, 'src')
 const outDir = resolve(__dirname, 'dist')
@@ -33,10 +34,17 @@ export default {
           }
         }
     },
+    plugins:
+    [
+      glsl()
+    ]
+    // below was the original build. new one above.
     // build:
     // {
     //     outDir: '../dist', // Output in the dist/ folder
     //     emptyOutDir: true, // Empty the folder first
     //     sourcemap: true // Add sourcemap
     // },
+
+
 }
